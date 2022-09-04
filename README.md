@@ -12,6 +12,7 @@ Project - **Sail**
 
 [View Presentation](/presentation.pdf)
 
+[View Recording](/Sail screenrecord.mp4)
 ## Steps to run this project locally
 
 Dependencies
@@ -29,3 +30,4 @@ npm run dev
 ```
 
 Once the project is running visit `https://localhost:3000` in your webbrowser.
+
