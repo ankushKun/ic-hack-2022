@@ -10,9 +10,11 @@ Track - **Education**
   
 Project - **Sail**
 
-[View Presentation](/presentation.pdf)
+Demo 👇
 
-[View Recording]("/Sail screenrecord.mp4")
+https://user-images.githubusercontent.com/50258860/188311325-09120afc-8ecb-47e9-af99-503d188a5613.mp4
+
+[View Presentation](/presentation.pdf)
 
 ## Steps to run this project locally
 
