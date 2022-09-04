@@ -2,6 +2,10 @@ import Navbar from "./components/navbar";
 import Image from "next/image";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler, ArcElement } from "chart.js";
+import { Bar, Line, Scatter, Bubble, Pie } from "react-chartjs-2";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, ArcElement);
 
 export default function Landing() {
     const [gotLeet, setGotLeet] = useState(false);
@@ -16,7 +20,7 @@ export default function Landing() {
             axios.post("/api/leet/" + localStorage.getItem("leetcode")).then((res) => {
                 // console.log(res.data);
                 setLeetData(res.data);
-                setGotLeet(true)
+                setGotLeet(true);
             })
         }
         if (!gotGithub) {
@@ -35,6 +39,53 @@ export default function Landing() {
             <div className="w-full p-1 flex h-screen overflow-scroll">
                 <div className="text-xl mx-5">
                     <div className="font-light mt-4">Leetcode Stats</div>
+                    {leetData ? <div className="scale-75 w-[500px] h-[500px]">
+                        <Pie data={{
+                            labels: [
+                                'Easy',
+                                'Medium',
+                                'Hard',
+                                // 'Unsolved'
+                            ],
+                            datasets: [{
+                                label: 'Questions Solved',
+                                // data: [leetData.easySolved, leetData.mediumSolved, leetData.hardSolved, leetData.totalQuestions - leetData.totalSolved],
+                                data: [leetData.easySolved, leetData.mediumSolved, 3],
+                                backgroundColor: [
+                                    '#0E0',
+                                    '#0A0',
+                                    '#070',
+                                    // '#696969',
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }} options={{
+                            elements: {
+                                arc: {
+                                    weight: 0.5,
+                                    borderWidth: 3
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        font: {
+                                            size: 25
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Leetcode Questions Solved',
+                                    font: { size: 40 }
+                                }
+                            },
+                            cutout: 120,
+                            responsive: true,
+                            maintainAspectRatio: true
+                        }} />
+                    </div> : ""}
                     <div className="bg-gray-200 rounded p-2 my-2 font-bold">
                         <div className="flex flex-row">
                             <div className="bg-gray-200 rounded p-2 my-2">

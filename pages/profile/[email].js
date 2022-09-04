@@ -1,14 +1,20 @@
-import Navbar from "./components/navbar";
+import Navbar from "../components/navbar";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import loginCheck from "../utils/loginCheck";
+import loginCheck from "../../utils/loginCheck";
 import axios from "axios";
-import Content from "./components/content";
+import Content from "../components/content";
 import Link from "next/link";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler, ArcElement } from "chart.js";
+import { Bar, Line, Scatter, Bubble, Pie } from "react-chartjs-2";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, ArcElement);
+
 
 export default function Landing() {
-    const [email, setEmail] = useState("");
+    const router = new useRouter()
+    const { email } = router.query;
     const [name, setName] = useState("");
     const [leetcode, setLeetcode] = useState();
     const [lcUpdated, setLcUpdated] = useState(false);
@@ -17,56 +23,46 @@ export default function Landing() {
     const [isMentor, setIsMentor] = useState(false);
     const [year, setYear] = useState(0);
     const [college, setCollege] = useState();
+    const [gotLeet, setGotLeet] = useState(false);
+    const [leetData, setLeetData] = useState();
 
-    const router = useRouter();
+    var prof = axios.post("/api/get-mentee", { email: email });
+    prof.then((res) => {
+        console.log(res.data);
+        setName(res.data.name);
+        setLeetcode(res.data.leetcode_username);
+        setGithub(res.data.github_username);
+        setYear(res.data.year);
+        setCollege(res.data.college);
+        localStorage.setItem("leetcode", res.data.leetcode_username);
+        localStorage.setItem("github", res.data.github_username);
+        localStorage.setItem("leetcode", res.data.leetcode_username);
+        localStorage.setItem("github", res.data.github_username);
+        localStorage.setItem("year", res.data.year);
+        localStorage.setItem("college", res.data.college);
+    });
+    prof.catch((err) => {
+        console.log(err);
+    })
+
     useEffect(() => {
-        loginCheck(() => { router.push("/") },
-            () => { router.push("/profile") });
-    }, []);
-    useEffect(() => {
-        if (typeof window !== undefined) {
-            const auth = localStorage.getItem("auth");
-            const mail = auth.split(":")[0];
-            setIsMentor(JSON.parse(localStorage.getItem("ismentor")));
-            setEmail(mail);
-            if (isMentor) {
-                var prof = axios.post("/api/get-mentor", { email: mail });
-            }
-            else { var prof = axios.post("/api/get-mentee", { email: mail }); }
-            prof.then((res) => {
-                console.log(res.data);
-                setName(res.data.name);
-                setLeetcode(res.data.leetcode_username);
-                setGithub(res.data.github_username);
-                setYear(res.data.year);
-                setCollege(res.data.college);
-                localStorage.setItem("leetcode", res.data.leetcode_username);
-                localStorage.setItem("github", res.data.github_username);
-                localStorage.setItem("leetcode", res.data.leetcode_username);
-                localStorage.setItem("github", res.data.github_username);
-                localStorage.setItem("year", res.data.year);
-                localStorage.setItem("college", res.data.college);
-            });
-            prof.catch((err) => {
-                console.log(err);
+        if (typeof window == undefined) { return }
+        if (!gotLeet) {
+            axios.post("/api/leet/" + localStorage.getItem("leetcode")).then((res) => {
+                // console.log(res.data);
+                setLeetData(res.data);
+                setGotLeet(true);
             })
         }
-    }, [])
-
-    function updateUsernames() {
-        if (lcUpdated) {
-            axios.post("/api/update/mentee/leetcode", { updateEmail: email, leetcodeUname: leetcode }).then((res) => {
-                // console.log(res.data);
-                localStorage.setItem("leetcode", leetcode);
-            }).catch((err) => { console.log(err) });
-        }
-        if (ghUpdated) {
-            axios.post("/api/update/mentee/github", { updateEmail: email, githubUname: github }).then((res) => {
-                // console.log(res.data);
-                localStorage.setItem("github", github);
-            }).catch((err) => { console.log(err) });
-        }
-    }
+        // if (!gotGithub) {
+        //     axios.post("/api/github/" + localStorage.getItem("github")).then((res) => {
+        //         // console.log(res.data);
+        //         setGithubData(res.data);
+        //         setGotGithub(true)
+        //         setGithub(localStorage.getItem("github"));
+        //     })
+        // }
+    }, []);
 
     return (
         <Content>
@@ -138,7 +134,7 @@ export default function Landing() {
                             <div className="card-actions justify-end mr-5">
                                 <button className="btn btn-primary bg-[#000000] hover:bg-green-900 active:bg-green-500 focus:outline-none">Show Appreciation</button>
                             </div>
-                            <div className="stats shadow my-1">
+                            {/* <div className="stats shadow my-1">
 
                                 <div className="stat place-items-center">
                                     <div className="stat-title">C++</div>
@@ -161,7 +157,7 @@ export default function Landing() {
 
 
 
-                            </div>
+                            </div> */}
                         </div>
                     </div >
 
@@ -184,30 +180,75 @@ export default function Landing() {
                                         <li>Cryptography</li>
                                         <li>Web3</li>
                                     </ul>
+                                    <br />
+                                    <br />
+                                    <h2 className="card-title">Links</h2>
+                                    <ul className="list-disc">
+                                        <li><Link href={"https://leetcode.com/" + leetcode} >Leetcode Profile</Link></li>
+                                        <li><Link href={"https://leetcode.com/" + leetcode} >Github Profile</Link></li>
+                                        <li>Email: {email}</li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div className="bg-gray-100 h-min rounded-md p-3 shadow-lg m-2">
-                                <label className="label">
-                                    <span className="label-text text-black">Leetcode Username</span>
-                                </label>
-                                <input type="text" placeholder="Leetcode Username" defaultValue={leetcode} className="input input-bordered text-white" onChange={(e) => {
-                                    console.log(e.target.value);
-                                    setLeetcode(e.target.value);
-                                    setLcUpdated(true);
-                                }} />
-                                <label className="label">
-                                    <span className="label-text text-black">Github Username</span>
-                                </label>
-                                <input type="text" placeholder="Github Username" defaultValue={github} className="input input-bordered text-white" onChange={(e) => {
-                                    console.log(e.target.value);
-                                    setGithub(e.target.value);
-                                    setGhUpdated(true);
-                                }} />
-                                <button className="block mx-auto btn mt-2" onClick={updateUsernames}>save</button>
+                            <div className="card w-96 shadow-xl bg-gray-100 text-black mx-5 ">
+                                <div className="card-body">
+                                    {/* <h2 className="card-title">Leetcode Stats</h2> */}
+                                    {leetData ? <div className="scale-50 -ml-[90px] -mt-[130px]  w-[500px] h-[500px]">
+                                        <Pie data={{
+                                            labels: [
+                                                'Easy',
+                                                'Medium',
+                                                'Hard',
+                                                // 'Unsolved'
+                                            ],
+                                            datasets: [{
+                                                label: 'Questions Solved',
+                                                // data: [leetData.easySolved, leetData.mediumSolved, leetData.hardSolved, leetData.totalQuestions - leetData.totalSolved],
+                                                data: [leetData.easySolved, leetData.mediumSolved, 3],
+                                                backgroundColor: [
+                                                    '#0E0',
+                                                    '#0A0',
+                                                    '#070',
+                                                    // '#696969',
+                                                ],
+                                                hoverOffset: 4
+                                            }]
+                                        }} options={{
+                                            elements: {
+                                                arc: {
+                                                    weight: 0.5,
+                                                    borderWidth: 3
+                                                },
+                                            },
+                                            plugins: {
+                                                legend: {
+                                                    position: 'top',
+                                                    labels: {
+                                                        font: {
+                                                            size: 25
+                                                        }
+                                                    }
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: 'Leetcode Questions Solved',
+                                                    font: { size: 40 }
+                                                }
+                                            },
+                                            cutout: 120,
+                                            responsive: true,
+                                            maintainAspectRatio: true
+                                        }} />
+                                    </div> : "Generating Stats..."}
+                                    <div className="-mt-20">
+                                        <Image className="" src={"https://github-readme-stats.vercel.app/api/top-langs/?username=" + github} width={300} height={250} />
+                                        <Image className="" src={"https://github-readme-stats.vercel.app/api?username=" + github + "&show_icons=true"} width={550} height={250} />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex items-stretch justify-center my-10">
-                            <div className="card w-96  shadow-xl bg-gray-100 text-black">
+                        {/* <div className="flex items-stretch justify-center my-10">
+                            <div className="card mr-12 shadow-xl bg-gray-100 text-black">
                                 <div className="card-body">
                                     <h2 className="card-title">Links</h2>
                                     <ul className="list-disc">
@@ -217,28 +258,8 @@ export default function Landing() {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="stats shadow mx-5">
 
-                                <div className="stat place-items-center">
-                                    <div className="stat-title">C++</div>
-                                    <div className="stat-value">55%</div>
-                                    <div className="stat-desc">Last week</div>
-                                </div>
-
-                                <div className="stat place-items-center">
-                                    <div className="stat-title">Total questions solved</div>
-                                    <div className="stat-value text-secondary">9</div>
-                                    <div className="stat-desc text-secondary">↗︎ 21.6 (1.5%)</div>
-                                </div>
-
-                                <div className="stat place-items-center">
-                                    <div className="stat-title">Skill set developed</div>
-                                    <div className="stat-value">16%</div>
-                                    <div className="stat-desc">↗︎23 (14%)</div>
-                                </div>
-
-                            </div>
-                        </div>
+                        </div> */}
 
                         <br />
                         <br />

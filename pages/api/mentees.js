@@ -13,7 +13,7 @@ export default function handler(req, res) {
         port: CONFIG.port,
     });
 
-    const QUERY = `SELECT name, year, college FROM mentee_auth`;
+    const QUERY = `SELECT name, year, college, email FROM mentee_auth`;
 
     con.query(QUERY, function (err, results, fields) {
         /* console.log("err", err); */
@@ -24,12 +24,12 @@ export default function handler(req, res) {
             res.status(500).json({ code: err.code, name: err.name });
         } else if (results) {
             const queryRes = results[0];
-            console.log(results);
+            // console.log(results);
             if (!queryRes) {
                 res.status(404).json({ "error": "User doesnot exist" });
             }
             else {
-                res.status(200).json();
+                res.status(200).json({ users: results });
             }
         }
     });
