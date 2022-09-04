@@ -35,23 +35,23 @@ export default function Landing() {
             <div className="w-full p-1 flex h-screen overflow-scroll">
                 <div className="text-xl mx-5">
                     <div className="font-light mt-4">Leetcode Stats</div>
-                    <div className="bg-gray-200 rounded p-2 my-2 font-bold">
+                    <div className="bg-green-500 rounded p-2 my-2 font-bold">
                         <div className="flex flex-row">
-                            <div className="bg-gray-200 rounded p-2 my-2">
-                                <span className="text-gray-600 text-sm font-bold ml-2">TOTAL QUESTIONS</span>
+                            <div className="bg-white rounded p-2 my-2 mr-2">
+                                <span className="text-black text-sm font-bold ml-2">TOTAL QUESTIONS</span>
                                 <span className=" block font-bold ml-2 text-black">{leetData ? leetData.totalQuestions : "..."}</span>
                             </div>
-                            <div className="bg-gray-200 rounded p-2 my-2">
-                                <span className="text-gray-600 text-sm font-bold ml-2">GLOBAL RANKING</span>
+                            <div className="bg-white rounded p-2 my-2">
+                                <span className="text-black text-sm font-bold ml-2">GLOBAL RANKING</span>
                                 <span className=" block font-bold ml-2 text-black">{leetData ? leetData.ranking : "..."}</span>
                             </div>
                         </div>
-                        <span className="text-gray-600 text-sm font-bold ml-2">SOLVED</span>
-                        <span className="text-blac  k block font-bold ml-2">{leetData ? leetData.totalSolved : "..."}</span>
+                        <span className="text-black text-sm font-bold ml-2">SOLVED</span>
+                        <span className="text-black block font-bold ml-2">{leetData ? leetData.totalSolved : "..."}</span>
                         <div className="flex flex-row ">
-                            <div className=" text-gray-600 m-2 text-sm font-bold">EASY<div className="font-bold text-lg text-black">{leetData ? leetData.easySolved + "/" + leetData.totalEasy : "..."}</div></div>
-                            <div className="text-gray-600 m-2 text-sm font-bold">MEDIUM<div className="font-bold text-lg text-black">{leetData ? leetData.mediumSolved + "/" + leetData.totalMedium : "..."}</div></div>
-                            <div className="text-gray-600 m-2 text-sm font-bold">HARD<div className="font-bold text-lg text-black">{leetData ? leetData.hardSolved + "/" + leetData.totalHard : "..."}</div></div>
+                            <div className=" text-black m-2 text-sm font-bold">EASY<div className="font-bold text-lg text-black">{leetData ? leetData.easySolved + "/" + leetData.totalEasy : "..."}</div></div>
+                            <div className="text-black m-2 text-sm font-bold">MEDIUM<div className="font-bold text-lg text-black">{leetData ? leetData.mediumSolved + "/" + leetData.totalMedium : "..."}</div></div>
+                            <div className="text-black m-2 text-sm font-bold">HARD<div className="font-bold text-lg text-black">{leetData ? leetData.hardSolved + "/" + leetData.totalHard : "..."}</div></div>
                         </div>
                     </div>
 
@@ -79,16 +79,21 @@ export default function Landing() {
                         </div> */}
                     </div>
                     <div className="font-light my-2">Github Stats</div>
-                    <div className="rounded bg-gray-600 p-2 my-2 mr-2 inline text-white font-bold w-fit">
+                    <div className="rounded bg-black p-2 my-2 mr-2 inline text-white font-bold w-fit">
                         {githubData ? githubData.public_repos : "..."} Repositories
                     </div>
-                    <div className="rounded bg-gray-600 p-2 my-2 inline text-white font-bold w-[100px]">
+                    <div className="rounded bg-black p-2 my-2 inline text-white font-bold w-[100px]">
                         {githubData ? githubData.public_gists : "..."} Gists
                     </div>
-                    <div className="my-2">
-                        <Image className="" src={"https://github-readme-stats.vercel.app/api/top-langs/?username=" + github} width={300} height={250} />
-                        <Image className="" src={"https://github-readme-stats.vercel.app/api?username=" + github + "&show_icons=true"} width={500} height={250} />
+                    <br />
+                    <br />
+                    <div className="flex items-stretch justify-center">
+                        <div className="my-2">
+                            <Image className="" src={"https://github-readme-stats.vercel.app/api/top-langs/?username=" + github} width={267} height={250} />
+                            <Image className="" src={"https://github-readme-stats.vercel.app/api?username=" + github + "&show_icons=true"} width={638} height={250} mx-5 />
+                        </div>
                     </div>
+
                 </div>
 
             </div>
