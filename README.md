@@ -12,7 +12,8 @@ Project - **Sail**
 
 [View Presentation](/presentation.pdf)
 
-[View Recording](/Sail screenrecord.mp4)
+[View Recording]("/Sail screenrecord.mp4")
+
 ## Steps to run this project locally
 
 Dependencies
