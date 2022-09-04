@@ -88,7 +88,7 @@ export default function Landing() {
 
                             <div className="stat">
                                 <div className="stat-title">Current Number of Students</div>
-                                <div className="stat-value">6</div>
+                                <div className="stat-value">{cards ? cards.length : "0"}</div>
                                 <div className="stat-actions">
                                     <button className="btn btn-sm text-white bg-[#000000] hover:bg-red-800 active:bg-red-500 focus:outline-none">Remove Student</button>
                                 </div>
