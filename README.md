@@ -1,7 +1,8 @@
 # IEEE IC Hack 2022
 
-## Track - Education
-## Team Elixir
+### Track - Education
+### Team Elixir
 
-## Project - Sail
+### Project - Sail
 
+### [View Presentation](/presentation.pdf)
